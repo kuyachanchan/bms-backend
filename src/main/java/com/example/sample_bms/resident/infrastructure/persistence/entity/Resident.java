@@ -1,4 +1,4 @@
-package com.example.sample_bms.resident.domain;
+package com.example.sample_bms.resident.infrastructure.persistence.entity;
 
 import java.util.UUID;
 

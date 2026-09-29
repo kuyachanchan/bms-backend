@@ -1,0 +1,170 @@
+openapi: 3.0.1
+
+info:
+  title: Resident API
+  description: APIs for managing resident information
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local Development
+
+tags:
+  - name: Resident
+    description: Resident information operations
+
+paths:
+  /api/v1/residents/{id}:
+    get:
+      tags:
+        - Resident
+      operationId: getResidentById
+      description: Retrieve resident information by ID.
+
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        "200":
+          description: Resident information retrieved successfully
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResidentResponse"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+        "404":
+          description: Resident not found
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/residents:
+    post:
+      tags:
+        - Resident
+      operationId: registerResident
+      description: Register a new resident.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterResidentRequest"
+      responses:
+        "201":
+          description: Resident registered successfully
+
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResidentResponse"
+
+        "400":
+          $ref: "#/components/responses/BadRequest"
+
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+
+        "403":
+          $ref: "#/components/responses/Forbidden"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+
+      properties:
+        code:
+          type: string
+
+        message:
+          type: string
+
+        timestamp:
+          type: string
+          format: date-time
+
+    RegisterResidentRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the resident
+        lastName:
+          type: string
+          description: Last name of the resident
+        middleName:
+          type: string
+          description: Middle name of the resident
+        address:
+          type: string
+          description: Address of the resident
+        householdNumber:
+          type: string
+          description: Household number of the resident
+
+    ResidentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+
+        firstName:
+          type: string
+
+        middleName:
+          type: string
+
+        lastName:
+          type: string
+
+  responses:
+    Unauthorized:
+      description: Authentication failed
+
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    BadRequest:
+      description: Invalid request
+
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+    Forbidden:
+      description: Access denied
+
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+
+security:
+  - bearerAuth: []

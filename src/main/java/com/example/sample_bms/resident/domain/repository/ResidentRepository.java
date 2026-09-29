@@ -1,7 +1,9 @@
-package com.example.sample_bms.resident.domain;
+package com.example.sample_bms.resident.domain.repository;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import com.example.sample_bms.resident.domain.entity.Resident;
 
 public interface ResidentRepository {
     Resident save(Resident resident);
